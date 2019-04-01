@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Model1.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="Model1StoreContainer">
+    <EntitySet Name="VacancySet" EntityType="Model1.Store.VacancySet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="RegionSet" EntityType="Model1.Store.RegionSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="OrganizationSet" EntityType="Model1.Store.OrganizationSet" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="VacancyRegion" Association="Model1.Store.VacancyRegion">
+      <End Role="Vacancy" EntitySet="VacancySet" />
+      <End Role="Region" EntitySet="RegionSet" />
+    </AssociationSet>
+    <AssociationSet Name="VacancyOrganization" Association="Model1.Store.VacancyOrganization">
+      <End Role="Vacancy" EntitySet="VacancySet" />
+      <End Role="Organization" EntitySet="OrganizationSet" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="VacancySet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Vakancy" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Region" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Salary" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Organization" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Person" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Phone" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Type" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="RegionId" Type="int" Nullable="false" />
+    <Property Name="OrganizationId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="RegionSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Average_salary" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Complexity" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="OrganizationSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Employees" Type="int" Nullable="false" />
+    <Property Name="Date" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Adress" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <Association Name="VacancyRegion">
+    <End Role="Vacancy" Type="Model1.Store.VacancySet" Multiplicity="*" />
+    <End Role="Region" Type="Model1.Store.RegionSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Region">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Vacancy">
+        <PropertyRef Name="RegionId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="VacancyOrganization">
+    <End Role="Vacancy" Type="Model1.Store.VacancySet" Multiplicity="*" />
+    <End Role="Organization" Type="Model1.Store.OrganizationSet" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Organization">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Vacancy">
+        <PropertyRef Name="OrganizationId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
