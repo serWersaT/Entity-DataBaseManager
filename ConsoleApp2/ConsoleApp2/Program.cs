@@ -11,7 +11,7 @@ namespace ConsoleApp2
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Вас приветствует БД по сбору информации о вакансиях!");
+            /*Console.WriteLine("Вас приветствует БД по сбору информации о вакансиях!");
             Console.WriteLine("Введите команду: ");
 
             string team = Console.ReadLine();       
@@ -21,7 +21,7 @@ namespace ConsoleApp2
             if (team == "добавить") a = new Class_Insert();
             if (team == "показать") a = new Class_Select();
             if (team == "удалить") a = new Class_Delete();
-            if (team == "обновить") a = new Class_Updata();
+            if (team == "обновить") a = new Class_Updata();*/
 
 
 
@@ -38,11 +38,14 @@ namespace ConsoleApp2
             var organization = new Organization();
             //
 
-            wm.Create<Works>(works);
+            /*wm.Create<Works>(works);
             wm.Create<Region>(region);
             wm.Create<Organization>(organization);
+            */
 
-
+            wm.SelectAll<Works>();
+            //wm.SelectAll<Region>();
+            //wm.SelectAll<Organization>();
             
 
             Console.ReadLine();          
@@ -77,10 +80,10 @@ namespace ConsoleApp2
             //throw new NotImplementedException();
 
 
-            using (Base.Model1Container works = new Base.Model1Container())
+            using (Base.Model1Container works = new Base.Model1Container())     
             {
                 var retList = new List<TEntity>();
-                foreach (var sss in works.Set<TEntity>())
+                foreach (TEntity sss in works.Set<TEntity>())       /*System.InvalidOperationException: "Тип сущности Works не входит в модель для текущего контекста."*/
                 {
                     var str = sss;
                     retList.Add(str);
@@ -91,18 +94,46 @@ namespace ConsoleApp2
         }
 
         public void Update<TEntity>(TEntity entity) where TEntity : class {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+
+            using (Base.Model1Container works = new Base.Model1Container())
+            {
+                Console.WriteLine("Введите номер идентификатора: ");
+                try
+                {
+                    int number = Convert.ToInt32(Console.ReadLine());
+                    var work = works.WorksSet.Where(x => x.Id == number).SingleOrDefault();
+
+                    
+                }
+                catch
+                {
+                    Console.WriteLine("Число введено не верно");
+                }
+
+
+                try
+                {
+
+                    works.SaveChanges();
+                }
+
+                catch(Exception e)
+                {
+                    Console.WriteLine("Нет подключения к БД: " + e);
+                }
+            }
         }
 
         public void Delete<TEntity>(int id) where TEntity : class {     // почему тут переменная int id, а не TEntity entity как в Create? 
             //throw new NotImplementedException();
-
+            TEntity ent;
             using (Base.Model1Container works = new Base.Model1Container())
             {
                 //works.Set<TEntity>().Remove(id);  /*Серьезность	Код	Описание	Проект	Файл	Строка	Состояние подавления Ошибка CS1503  Аргумент 1: не удается преобразовать из "int" в "TEntity".ConsoleApp2 C:\C# проекты\дз entity modal first\дз\ConsoleApp2\ConsoleApp2\Program.cs	104	Активный*/
                 /*поему remove должен принимать аргумент TEntity?????????*/
 
-                works.Set<TEntity>().Remove(id);
+                works.Set<TEntity>().Remove(10);
 
                 works.SaveChanges();
             }
