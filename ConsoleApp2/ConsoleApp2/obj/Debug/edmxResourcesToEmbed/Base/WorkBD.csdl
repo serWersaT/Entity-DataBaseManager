@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="Model1" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2009/11/edm" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
-  <EntityContainer Name="Model1Container" annotation:LazyLoadingEnabled="true" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+  <EntityContainer Name="DefaultDbContext" annotation:LazyLoadingEnabled="true" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
     <EntitySet Name="VacancySet" EntityType="Model1.Vacancy" />
     <EntitySet Name="RegionSet" EntityType="Model1.Region" />
     <EntitySet Name="OrganizationSet" EntityType="Model1.Organization" />
@@ -30,6 +30,7 @@
     <NavigationProperty Name="Organization1" Relationship="Model1.VacancyOrganization" FromRole="Vacancy" ToRole="Organization" />
     <Property Name="RegionId" Type="Int32" Nullable="false" />
     <Property Name="OrganizationId" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" Nullable="false" />
   </EntityType>
   <EntityType Name="Region">
     <Key>
@@ -40,6 +41,7 @@
     <Property Name="Average_salary" Type="String" Nullable="false" />
     <Property Name="Complexity" Type="String" Nullable="false" />
     <NavigationProperty Name="Vacancy" Relationship="Model1.VacancyRegion" FromRole="Region" ToRole="Vacancy" />
+    <Property Name="DateOn" Type="DateTime" Nullable="false" />
   </EntityType>
   <EntityType Name="Organization">
     <Key>

@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+  <EntityContainer Name="ModelContainer" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="VacancySet" EntityType="Model.Vacancy" />
+    <EntitySet Name="RegionSet" EntityType="Model.Region" />
+    <EntitySet Name="OrganizationSet" EntityType="Model.Organization" />
+    <AssociationSet Name="VacancyRegion" Association="Model.VacancyRegion">
+      <End EntitySet="VacancySet" Role="Vacancy" />
+      <End EntitySet="RegionSet" Role="Region" />
+    </AssociationSet>
+    <AssociationSet Name="VacancyOrganization" Association="Model.VacancyOrganization">
+      <End EntitySet="VacancySet" Role="Vacancy" />
+      <End EntitySet="OrganizationSet" Role="Organization" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Vacancy">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+    <Property Name="Vakancy" Type="String" Nullable="false" />
+    <Property Name="RegionName" Type="String" Nullable="false" />
+    <Property Name="Salary" Type="String" Nullable="false" />
+    <Property Name="OrganizationName" Type="String" Nullable="false" />
+    <Property Name="Person" Type="String" Nullable="false" />
+    <Property Name="Phone" Type="String" Nullable="false" />
+    <Property Name="Type" Type="String" Nullable="false" />
+    <Property Name="Description" Type="String" Nullable="false" />
+    <Property Name="RegionId" Type="Int32" Nullable="false" />
+    <Property Name="OrganizationId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Region" Relationship="Model.VacancyRegion" FromRole="Vacancy" ToRole="Region" />
+    <NavigationProperty Name="Organization" Relationship="Model.VacancyOrganization" FromRole="Vacancy" ToRole="Organization" />
+  </EntityType>
+  <EntityType Name="Region">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+    <Property Name="Name" Type="String" Nullable="false" />
+    <Property Name="AverageSalary" Type="String" Nullable="false" />
+    <Property Name="Complexity" Type="String" Nullable="false" />
+    <NavigationProperty Name="Vacancy" Relationship="Model.VacancyRegion" FromRole="Region" ToRole="Vacancy" />
+  </EntityType>
+  <EntityType Name="Organization">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+    <Property Name="Employees" Type="Int32" Nullable="false" />
+    <Property Name="Date" Type="String" Nullable="false" />
+    <Property Name="Adress" Type="String" Nullable="false" />
+    <NavigationProperty Name="Vacancies" Relationship="Model.VacancyOrganization" FromRole="Organization" ToRole="Vacancy" />
+  </EntityType>
+  <Association Name="VacancyRegion">
+    <End Type="Model.Vacancy" Multiplicity="*" Role="Vacancy" />
+    <End Type="Model.Region" Multiplicity="1" Role="Region" />
+    <ReferentialConstraint>
+      <Principal Role="Region">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Vacancy">
+        <PropertyRef Name="RegionId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="VacancyOrganization">
+    <End Type="Model.Vacancy" Multiplicity="*" Role="Vacancy" />
+    <End Type="Model.Organization" Multiplicity="1" Role="Organization" />
+    <ReferentialConstraint>
+      <Principal Role="Organization">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Vacancy">
+        <PropertyRef Name="OrganizationId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

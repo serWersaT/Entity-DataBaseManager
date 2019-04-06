@@ -23,13 +23,16 @@ namespace ConsoleApp2
             if (team == "удалить") a = new Class_Delete();
             if (team == "обновить") a = new Class_Updata();*/
 
-
-
-
             var wm = new DataManager();
             //
 
-            var works = new Works();
+            var selectedVacancy = wm.SelectAll<Vacancy>().Where(x=>x.Id==1).SingleOrDefault();
+            if (selectedVacancy != null) {
+                selectedVacancy.Description = "новое описание";
+                wm.Update(selectedVacancy);
+            }
+
+            var works = new Vacancy();
             //
 
             var region = new Region();
@@ -43,7 +46,7 @@ namespace ConsoleApp2
             wm.Create<Organization>(organization);
             */
 
-            wm.SelectAll<Works>();
+            wm.SelectAll<Vacancy>();
             //wm.SelectAll<Region>();
             //wm.SelectAll<Organization>();
             
@@ -59,33 +62,26 @@ namespace ConsoleApp2
     }
 
 
-    public class DataManager : IDataManager
-    {
-        public void Create<TEntity>(TEntity entity) where TEntity : class {
-            using (Base.Model1Container works = new Base.Model1Container()) {
-                try
-                {
+    public class DataManager : IDataManager {
+        public void Create<TEntity>(TEntity entity) where TEntity : EntityBase, new() {
+            using (Base.ModelContainer works = new Base.ModelContainer()) {
+                try {
                     works.Set<TEntity>().Add(entity);
                     Console.WriteLine("Новые значения добавлены");
                     works.SaveChanges();
                 }
-                catch(Exception e) {
+                catch (Exception e) {
                     //logger.Log(e);
                     Console.WriteLine($"Нет подключения к БД\r\n {e}");
                 }
             }
         }
 
-        public List<TEntity> SelectAll<TEntity>() where TEntity : class {
-            //throw new NotImplementedException();
-
-
-            using (Base.Model1Container works = new Base.Model1Container())     
-            {
+        public List<TEntity> SelectAll<TEntity>() where TEntity : EntityBase, new() {
+            using (Base.ModelContainer works = new Base.ModelContainer()) {
                 var retList = new List<TEntity>();
-                foreach (TEntity sss in works.Set<TEntity>())       /*System.InvalidOperationException: "Тип сущности Works не входит в модель для текущего контекста."*/
-                {
-                    var str = sss;
+                foreach (TEntity entity in works.Set<TEntity>()) /*System.InvalidOperationException: "Тип сущности Works не входит в модель для текущего контекста."*/ {
+                    var str = entity;
                     retList.Add(str);
                 }
                 return retList.ToList<TEntity>();
@@ -93,47 +89,24 @@ namespace ConsoleApp2
 
         }
 
-        public void Update<TEntity>(TEntity entity) where TEntity : class {
-            //throw new NotImplementedException();
-
-            using (Base.Model1Container works = new Base.Model1Container())
-            {
-                Console.WriteLine("Введите номер идентификатора: ");
-                try
-                {
-                    int number = Convert.ToInt32(Console.ReadLine());
-                    var work = works.WorksSet.Where(x => x.Id == number).SingleOrDefault();
-
-                    
-                }
-                catch
-                {
-                    Console.WriteLine("Число введено не верно");
-                }
-
-
-                try
-                {
-
+        public void Update<TEntity>(TEntity entity) where TEntity : EntityBase, new() {
+            using (Base.ModelContainer works = new Base.ModelContainer()) {
+                try {
                     works.SaveChanges();
                 }
-
-                catch(Exception e)
-                {
+                catch (Exception e) {
                     Console.WriteLine("Нет подключения к БД: " + e);
                 }
             }
         }
 
-        public void Delete<TEntity>(int id) where TEntity : class {     // почему тут переменная int id, а не TEntity entity как в Create? 
-            //throw new NotImplementedException();
-            TEntity ent;
-            using (Base.Model1Container works = new Base.Model1Container())
-            {
-                //works.Set<TEntity>().Remove(id);  /*Серьезность	Код	Описание	Проект	Файл	Строка	Состояние подавления Ошибка CS1503  Аргумент 1: не удается преобразовать из "int" в "TEntity".ConsoleApp2 C:\C# проекты\дз entity modal first\дз\ConsoleApp2\ConsoleApp2\Program.cs	104	Активный*/
-                /*поему remove должен принимать аргумент TEntity?????????*/
-
-                works.Set<TEntity>().Remove(10);
+        public void Delete<TEntity>(int id) where TEntity : EntityBase, new() {
+            using (Base.ModelContainer works = new Base.ModelContainer()) {
+                TEntity entity = new TEntity() {
+                    Id = id
+                };
+                works.Set<TEntity>().Attach(entity);
+                works.Set<TEntity>().Remove(entity);
 
                 works.SaveChanges();
             }
