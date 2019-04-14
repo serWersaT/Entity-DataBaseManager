@@ -23,11 +23,19 @@ namespace DataAccess {
         public List<TEntity> SelectAll<TEntity>() where TEntity : EntityBase, new() {
             using (ModelContainer works = new ModelContainer()) {
                 var retList = new List<TEntity>();
-                foreach (TEntity entity in works.Set<TEntity>()) /*System.InvalidOperationException: "Тип сущности Works не входит в модель для текущего контекста."*/ {
+                foreach (TEntity entity in works.Set<TEntity>() /*var row in works.Set<TEntity>()*/) /*System.Data.Entity.Core.MetadataException: "Недопустим как минимум один входной путь, поскольку он превышает допустимую длину или имеет неверный формат. NotSupportedException: Данный формат пути не поддерживается."*/
+                                                                                                     /*что такое показать поток в исходном коде?*/
+                {
                     var str = entity;
+                    //var str = row;
                     retList.Add(str);
                 }
+
+                //var retList1 = (from rl in works.VacancySet select works.Set<TEntity>());
+
+
                 return retList.ToList<TEntity>();
+                //return retList1.ToList<TEntity>();      /*Серьезность	Код	Описание Проект	Файл Строка	Состояние подавления Ошибка	CS1929 'IQueryable<DbSet<TEntity>>" не содержит определение для "ToList", и наиболее подходящий перегруженный метод расширения "Enumerable.ToList<TEntity>(IEnumerable<TEntity>)" требует наличия получателя типа "IEnumerable<TEntity>". DataAccess C:\C# проекты\дз entity modal first\7\ConsoleApp\DataAccess\DataManager.cs	38	Активный */
             }
 
         }
