@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ConsoleApp2
 {
-    class Logger
+    public class Logger
     {
         public void Log(string msg)
         {
